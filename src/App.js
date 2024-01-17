@@ -1,71 +1,24 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const app = express();
-const PORT = process.env.PORT || 3001;
+import React, { useState } from 'react';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import axios from 'axios';
+import CountryInput from './components/CountryInput';
+import UniversityList from './components/UniversityList';
+import { Route,BrowserRouter as Router, Switch } from 'react-router-dom';
+import University from './components/University';
+import Main from './components/Main';
 
-app.use(bodyParser.json());
-app.use(cors()); 
-// Connect to MongoDB (replace 'your-database-uri' with your MongoDB connection string)
-mongoose.connect('mongodb://127.0.0.1:27017/assignment');
+const App = () => {
+ 
 
-// Define MongoDB schema and model
-const universitySchema = new mongoose.Schema({
-  country: String,
-  universities: [
-    {
-      name: String,
-      domains: [String],
-      alpha_two_code: String,
-      web_pages: [String],
-    },
-  ],
-});
+  return (
+    <Router>
+    <Switch>
+    <Route path="/" component={Main} />
+    <Route path="/university/:university" component={University} />
+    </Switch>
+    </Router>
+  );
+};
 
-const University = mongoose.model('University', universitySchema);
-
-// API to save country name and data of universities in the database
-app.post('/api/save', async (req, res) => {
-  try {
-    const { country, universities } = req.body;
-    const savedData = await University.create({ country, universities });
-    res.json(savedData);
-  } catch (error) {
-    console.error('Error saving data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-// API to retrieve data of universities based on country name
-app.get('/api/retrieve/:country', async (req, res) => {
-  try {
-    const { country } = req.params;
-    const data = await University.findOne({ country });
-    res.json(data || {});
-  } catch (error) {
-    console.error('Error retrieving data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-// API to update the data of a university based on country name and university ID
-app.put('/api/update/:country/:universityId', async (req, res) => {
-  try {
-    const { country, universityId } = req.params;
-    const updateData = req.body;
-    const updatedUniversity = await University.findOneAndUpdate(
-      { country, 'universities._id': universityId },
-      { $set: { 'universities.$': updateData } },
-      { new: true }
-    );
-    res.json(updatedUniversity || {});
-  } catch (error) {
-    console.error('Error updating data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+export default App;

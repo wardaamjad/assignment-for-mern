@@ -18,8 +18,12 @@ const CountryInput = ({ onCountryChange }) => {
       <TextField
         label="Country Name"
         variant="outlined"
+        placeholder='input country name'
         fullWidth
         value={country}
+        style={
+          {marginTop:'50px'}
+        }
         onChange={handleCountryChange}
       />
     </form>

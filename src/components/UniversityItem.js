@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import WebIcon from '@mui/icons-material/Web';
+import React, { useState } from "react";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import WebIcon from "@mui/icons-material/Web";
+import { Link } from "react-router-dom";
 
 const UniversityItem = ({ university }) => {
   const [open, setOpen] = useState(false);
@@ -14,7 +15,7 @@ const UniversityItem = ({ university }) => {
   };
 
   const handleWebsiteClick = () => {
-    window.open(university.web_pages[0], '_blank');
+    window.open(university.web_pages[0], "_blank");
   };
 
   return (
@@ -29,10 +30,15 @@ const UniversityItem = ({ university }) => {
         </IconButton>
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <ListItemText primary={`Domains: ${university.domains.join(', ')}`} />
+        
+          <ListItemText primary={<Link to={`/university/${university.name}`}>{university.name}</Link>} />
+        
+
+        <ListItemText primary={`Domains: ${university.domains.join(", ")}`} />
         <ListItemText primary={`Country Code: ${university.alpha_two_code}`} />
-        <ListItemText primary={`Web Sites: ${university.web_pages.join(', ')}`} />
-        <ListItemText primary={`State / Province: ${university.country}`} />
+        <ListItemText
+          primary={`Web Sites: ${university.web_pages.join(", ")}`}
+        />
         <ListItemText primary={`Country: ${university.country}`} />
       </Collapse>
     </>
